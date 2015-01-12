@@ -118,10 +118,12 @@ func decodeStruct(v reflect.Value, x interface{}) {
 	for k, c := range getNode(x) {
 		if f, ok := findField(v, k); !ok && k == "" {
 			panic(getString(x) + " cannot be decoded as struct " + t.String())
-		} else if !f.CanSet() {
-			panic(k + " cannot be set in struct " + t.String())
-		} else {
-			decodeValue(f, c)
+		} else if ok {
+			if !f.CanSet() {
+				panic(k + " cannot be set in struct " + t.String())
+			} else {
+				decodeValue(f, c)
+			}
 		}
 	}
 }
